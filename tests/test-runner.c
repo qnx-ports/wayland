@@ -38,7 +38,9 @@
 #include <errno.h>
 #include <limits.h>
 #include <signal.h>
+#if !defined(__QNXNTO__)
 #include <sys/ptrace.h>
+#endif
 #ifdef HAVE_SYS_PROCCTL_H
 #include <sys/procctl.h>
 #elif defined(HAVE_SYS_PRCTL_H)
@@ -324,8 +326,24 @@ int main(int argc, char *argv[])
 	int total, pass;
 	int info;
 
+#if defined(__QNXNTO__)
+	/* Ignore SIGPIPE; there are some unit tests that expect EPIPE,
+	 *  but QNX default behaviour for SIGPIPE terminates client.
+	 */
+	struct sigaction sigpipe;
+	sigpipe.sa_handler = SIG_IGN;
+	sigemptyset(&sigpipe.sa_mask);
+	sigpipe.sa_flags = 0;
+	sigaction(SIGPIPE, &sigpipe, NULL);
+#endif /* __QNXNTO__ */
+
 	if (isatty(fileno(stderr)))
 		is_atty = 1;
+
+#if defined(__QNXNTO__)
+	fd_leak_check_enabled = 0;
+	timeouts_enabled = !getenv("WAYLAND_TEST_NO_TIMEOUTS");
+#else
 
 	if (is_debugger_attached()) {
 		fd_leak_check_enabled = 0;
@@ -334,6 +352,7 @@ int main(int argc, char *argv[])
 		fd_leak_check_enabled = !getenv("WAYLAND_TEST_NO_LEAK_CHECK");
 		timeouts_enabled = !getenv("WAYLAND_TEST_NO_TIMEOUTS");
 	}
+#endif /* __QNXNTO__ */
 
 	if (argc == 2 && strcmp(argv[1], "--help") == 0)
 		usage(argv[0], EXIT_SUCCESS);

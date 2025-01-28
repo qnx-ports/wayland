@@ -349,6 +349,7 @@ last_line_of(char *s)
 	return last;
 }
 
+#if !defined(__QNXNTO__)
 static void
 client_test_queue_destroy_with_attached_proxies(void)
 {
@@ -394,6 +395,7 @@ client_test_queue_destroy_with_attached_proxies(void)
 
 	wl_display_disconnect(display);
 }
+#endif
 
 static void
 client_test_queue_proxy_event_to_destroyed_queue(void)
@@ -651,6 +653,7 @@ TEST(queue_set_queue_race)
 	display_destroy(d);
 }
 
+#if !defined(__QNXNTO__)
 TEST(queue_destroy_with_attached_proxies)
 {
 	struct display *d = display_create();
@@ -662,6 +665,7 @@ TEST(queue_destroy_with_attached_proxies)
 
 	display_destroy(d);
 }
+
 
 TEST(queue_proxy_event_to_destroyed_queue)
 {
@@ -686,6 +690,7 @@ TEST(queue_proxy_event_to_destroyed_queue)
 	display_destroy_expect_signal(d, SIGABRT);
 }
 
+
 TEST(queue_destroy_default_with_attached_proxies)
 {
 	struct display *d = display_create();
@@ -697,7 +702,7 @@ TEST(queue_destroy_default_with_attached_proxies)
 
 	display_destroy(d);
 }
-
+#endif
 TEST(queue_names)
 {
 	struct display *d = display_create();

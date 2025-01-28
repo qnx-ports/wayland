@@ -44,6 +44,10 @@
 #include "wayland-private.h"
 #include "wayland-os.h"
 
+#if defined(__QNXNTO__)
+#include <sys/memstream.h>
+#endif
+
 static inline uint32_t
 div_roundup(uint32_t n, size_t a)
 {
