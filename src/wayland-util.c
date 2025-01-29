@@ -31,16 +31,6 @@
 #include <string.h>
 #include <stdarg.h>
 
-#if defined(WIN32)
-// wayland-scanner uses wl_list and wl_array so it includes wayland-util.c.  But wayland-util.c
-// includes more than just wl_list and wl_array.  Some of the things that it includes use the
-// following types that aren't defined for Windows but the things that use those types aren't
-// used by the scanner.  For Windows, we provide definitions so that wayland-utils.c can be
-// built for the Windows scanner.
-typedef int uid_t;
-typedef int gid_t;
-#endif
-
 #include "wayland-util.h"
 #include "wayland-private.h"
 
