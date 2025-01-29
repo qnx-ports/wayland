@@ -213,6 +213,14 @@ TEST(event_loop_multiple_same_signals)
 	for (i = 0; i < 5; ++i) {
 		calls_no = 0;
 		assert(kill(getpid(), SIGUSR1) == 0);
+#if defined(__QNXNTO__)
+		/* On QNX Neutrino, the underlying signalfd/epoll implementation causes
+		 *	epoll_wait to receive signals from each signalfd separately. This means
+		 *  it's possible for epoll_wait to only return with one event (even when
+		 *  a non-zero timeout specified). Delay to allow signalfd to propogate.
+		 */
+		usleep(1000);
+#endif
 		/*
 		 * We need a non-zero timeout here to allow the test to pass
 		 * on non-Linux systems (see comment in event_loop_signal).

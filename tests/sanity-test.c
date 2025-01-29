@@ -85,6 +85,7 @@ FAIL_TEST(sanity_assert)
 	assert(0);
 }
 
+#if !defined(__QNXNTO__)
 FAIL_TEST(sanity_fd_leak)
 {
 	int fd[2];
@@ -182,6 +183,7 @@ FAIL_TEST(tc_client_fd_leaks_exec)
 	test_disable_coredumps();
 	display_destroy(d);
 }
+#endif
 
 static char *
 map_file(int fd, size_t *len)

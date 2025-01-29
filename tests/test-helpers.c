@@ -41,6 +41,14 @@
 
 #include "test-runner.h"
 
+#if defined(__QNXNTO__)
+int
+count_open_fds(void)
+{
+	/* Just return 0. Even when leak checks disabled, this still needs to be defined. */
+	return 0;
+}
+#else
 #if defined(__FreeBSD__)
 #include <sys/sysctl.h>
 
@@ -117,6 +125,7 @@ count_open_fds(void)
 	return count;
 }
 #endif
+#endif /* __QNXNTO__ */
 
 void
 exec_fd_leak_check(int nr_expected_fds)

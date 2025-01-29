@@ -326,6 +326,11 @@ wl_client_flush(struct wl_client *client);
 void
 wl_client_get_credentials(struct wl_client *client,
 			  pid_t *pid, uid_t *uid, gid_t *gid);
+#if defined(__QNXNTO__)
+void
+wl_client_set_credentials(struct wl_client *client,
+			  pid_t pid, uid_t uid, gid_t gid);
+#endif
 
 int
 wl_client_get_fd(struct wl_client *client);

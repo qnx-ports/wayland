@@ -40,6 +40,10 @@
 #include <stdio.h>
 #include <sys/epoll.h>
 
+#if defined(__QNXNTO__)
+#define MSG_CMSG_CLOEXEC 0
+#endif
+
 #include "wayland-private.h"
 #include "test-runner.h"
 #include "wayland-os.h"
